@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .body {
+            margin: 0px;
+        }
+        #square {
+            width: 300px;
+            height: 300px;
+            background-color: red;
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="square"></div>
+
+    <script>
+        // Armazene a posição atual do quadrado em variáveis
+        let currentX = 0;
+        let currentY = 0;
+        let moving = false;
+
+        // Obtenha a referência do elemento HTML do quadrado
+        let square = document.getElementById("square");
+
+        // Adicione um evento de "mousedown" ao quadrado que permite que ele seja movido
+        square.addEventListener("mousedown", function (event) {
+
+            // Armazene a posição inicial do mouse em variáveis
+            let startX = event.clientX;
+            let startY = event.clientY;
+
+            let rect = event.target.getBoundingClientRect();
+            let x = event.pageX - rect.left; // coordenada x relativa à div
+            let y = event.pageY - rect.top;  // coordenada y relativa à div
+
+            // Adicione um evento de "mousemove" ao documento que permite que o quadrado seja movido
+            document.addEventListener("mousemove", moveSquare);
+
+            // Esta é a função que move o quadrado de acordo com a posição do mouse
+            function moveSquare(event) {
+                // Calcule a diferença entre a posição atual do mouse e a posição inicial
+                let dx = event.clientX - startX - x;
+                let dy = event.clientY - startY - y;
+
+                // Atualize a posição atual do quadrado com a diferença calculada
+                currentX += dx;
+                currentY += dy;
+
+                console.log(`currentX: ${currentX}, currentY: ${currentY}`);
+
+                // Atualize a posição do quadrado na tela
+                if (moving) {
+                    square.style.transform = "translate(" + currentX + "px, " + currentY + "px)";
+                }
+
+                startX = currentX;
+                startY = currentY;
+                moving = true;
+            }
+
+            // Adicione um evento de "mouseup" ao documento que para o movimento do quadrado
+            document.addEventListener("mouseup", function () {
+                document.removeEventListener("mousemove", moveSquare);
+                moving = false;
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>
